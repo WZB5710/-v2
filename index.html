@@ -596,6 +596,8 @@
             padding: 28px 24px;
             max-width: 400px;
             width: 100%;
+            max-height: 88vh;
+            overflow-y: auto;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.20);
             animation: fadeUp 0.25s ease;
         }
@@ -624,6 +626,162 @@
         .modal .form-actions .btn {
             flex: 1;
             min-height: 48px;
+        }
+
+        /* ===== 可报工提醒弹窗 ===== */
+        #readyPopup .modal {
+            animation: popIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-top: 4px solid #16a34a;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .ready-popup-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 46vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 2px;
+            margin-bottom: 4px;
+        }
+
+        .ready-popup-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 14px;
+            background: #f8faff;
+            border: 1.5px solid #e6edf6;
+            border-radius: 14px;
+            border-left: 4px solid #16a34a;
+        }
+
+        .ready-popup-item.overdue-item {
+            border-left-color: #dc2626;
+        }
+
+        .ready-popup-item .info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .ready-popup-item .item-number {
+            font-size: 22px;
+            font-weight: 800;
+            color: #2a6df4;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+            line-height: 1.2;
+        }
+
+        .ready-popup-item .item-number .hash {
+            color: #16a34a;
+        }
+
+        .ready-popup-item.overdue-item .item-number .hash {
+            color: #dc2626;
+        }
+
+        .ready-popup-item .item-model {
+            font-size: 13px;
+            color: #5b6e8a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .ready-popup-item .mini-tag {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1px 8px;
+            border-radius: 10px;
+        }
+
+        .ready-popup-item .btn {
+            flex: 0 0 auto;
+            min-height: 36px;
+            padding: 6px 16px;
+            font-size: 14px;
+            border-radius: 10px;
+        }
+
+        /* ===== 设置项辅助样式 ===== */
+        .setting-block {
+            margin-bottom: 20px;
+        }
+
+        .field-hint {
+            font-size: 12.5px;
+            color: #7f94b0;
+            line-height: 1.5;
+            padding: 2px 4px 0;
+        }
+
+        .preset-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+            padding-left: 4px;
+        }
+
+        .chip {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1.5px solid #d9e2ef;
+            background: #fff;
+            color: #3d5470;
+            font-size: 13px !important;
+            font-weight: 600;
+            cursor: pointer;
+            min-height: 32px;
+            transition: all 0.15s;
+            flex: 0 0 auto;
+        }
+
+        .chip:active {
+            transform: scale(0.95);
+        }
+
+        .chip.active {
+            background: #2a6df4;
+            border-color: #2a6df4;
+            color: #fff;
+        }
+
+        .input-with-unit {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-with-unit input {
+            padding-right: 44px;
+        }
+
+        .input-with-unit .unit {
+            position: absolute;
+            right: 16px;
+            color: #7f94b0;
+            font-weight: 600;
+            font-size: 15px;
+            pointer-events: none;
         }
 
         /* ===== 桌面适配 ===== */
@@ -796,14 +954,50 @@
     <div class="modal-overlay" id="settingsModal">
         <div class="modal">
             <h3>⚙️ 设置</h3>
-            <p>配置报工后跳转的地址（URL Scheme 或 网页链接）</p>
-            <div class="form-group">
+            <p>配置报工窗口浮动比例与跳转地址</p>
+
+            <!-- 报工窗口浮动比例 -->
+            <div class="form-group setting-block">
+                <label for="windowPercentInput">报工窗口浮动比例（上下各浮动）</label>
+                <div class="input-with-unit">
+                    <input type="number" id="windowPercentInput" min="0" max="100" step="1" placeholder="20" />
+                    <span class="unit">%</span>
+                </div>
+                <span class="field-hint">
+                    以工时为中心，前后各浮动该比例。<br />
+                    例：工时 100 分钟、浮动 20% → 最早第 80 分钟、最晚第 120 分钟可报工。
+                </span>
+                <div class="preset-chips" id="percentPresets">
+                    <button type="button" class="chip" data-pct="5" onclick="setPercentPreset(5)">5%</button>
+                    <button type="button" class="chip" data-pct="10" onclick="setPercentPreset(10)">10%</button>
+                    <button type="button" class="chip" data-pct="20" onclick="setPercentPreset(20)">20%</button>
+                    <button type="button" class="chip" data-pct="30" onclick="setPercentPreset(30)">30%</button>
+                    <button type="button" class="chip" data-pct="50" onclick="setPercentPreset(50)">50%</button>
+                </div>
+            </div>
+
+            <!-- 跳转地址 -->
+            <div class="form-group setting-block">
                 <label for="jumpUrlInput">跳转地址</label>
                 <input type="text" id="jumpUrlInput" placeholder="例如: welink:// 或 https://..." />
+                <span class="field-hint">报工成功后自动跳转的地址（URL Scheme 或 网页链接）</span>
             </div>
+
             <div class="form-actions">
                 <button class="btn btn-outline" onclick="closeSettingsModal()">取消</button>
-                <button class="btn btn-primary" onclick="saveJumpUrl()">保存</button>
+                <button class="btn btn-primary" onclick="saveSettings()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 可报工自动提醒弹窗 ===== -->
+    <div class="modal-overlay" id="readyPopup">
+        <div class="modal">
+            <h3>⏰ 有工件可以报工啦</h3>
+            <p>以下工件已进入报工时间窗口，请及时报工</p>
+            <div id="readyPopupList" class="ready-popup-list"></div>
+            <div class="form-actions">
+                <button class="btn btn-outline" onclick="closeReadyPopup()">稍后再说</button>
             </div>
         </div>
     </div>
@@ -816,12 +1010,19 @@
         const STORAGE_KEY_MODELS = 'worktime_models';
         const STORAGE_KEY_RECORDS = 'worktime_records';
         const STORAGE_KEY_JUMP_URL = 'worktime_jump_url';
+        const STORAGE_KEY_WINDOW_PERCENT = 'worktime_window_percent';
+
+        const DEFAULT_WINDOW_PERCENT = 20;   // 默认上下浮动 20%
 
         let models = [];
         let records = [];
         let jumpUrl = '';
+        let windowPercent = DEFAULT_WINDOW_PERCENT;   // 报工窗口浮动比例（%）
         let currentView = 'active';
         let expanded = {};
+
+        // 已弹窗提醒过的记录 ID（内存级去重，避免同一秒内反复弹窗）
+        let notifiedIds = new Set();
 
         function loadData() {
             try {
@@ -835,7 +1036,18 @@
             } catch { records = []; }
 
             jumpUrl = localStorage.getItem(STORAGE_KEY_JUMP_URL) || '';
+
+            // 读取浮动比例并做合法性校验
+            const pctRaw = localStorage.getItem(STORAGE_KEY_WINDOW_PERCENT);
+            const pct = parseFloat(pctRaw);
+            windowPercent = (pctRaw !== null && !isNaN(pct) && pct >= 0 && pct <= 100)
+                ? pct
+                : DEFAULT_WINDOW_PERCENT;
+
+            // 回填到设置面板
             document.getElementById('jumpUrlInput').value = jumpUrl;
+            document.getElementById('windowPercentInput').value = windowPercent;
+            syncPresetChips();
         }
 
         function saveModels() {
@@ -846,12 +1058,48 @@
             localStorage.setItem(STORAGE_KEY_RECORDS, JSON.stringify(records));
         }
 
-        function saveJumpUrl() {
-            const val = document.getElementById('jumpUrlInput').value.trim();
-            jumpUrl = val;
-            localStorage.setItem(STORAGE_KEY_JUMP_URL, val);
+        // ===== 统一保存设置（跳转地址 + 浮动比例） =====
+        function saveSettings() {
+            const urlVal = document.getElementById('jumpUrlInput').value.trim();
+            const pctRaw = document.getElementById('windowPercentInput').value.trim();
+            const pctVal = parseFloat(pctRaw);
+
+            if (pctRaw === '' || isNaN(pctVal)) {
+                alert('⚠️ 请输入报工窗口浮动比例');
+                return;
+            }
+            if (pctVal < 0 || pctVal > 100) {
+                alert('⚠️ 浮动比例请在 0 ~ 100 之间');
+                return;
+            }
+
+            jumpUrl = urlVal;
+            windowPercent = pctVal;
+
+            localStorage.setItem(STORAGE_KEY_JUMP_URL, jumpUrl);
+            localStorage.setItem(STORAGE_KEY_WINDOW_PERCENT, String(windowPercent));
+
+            // 比例变化后，重新评估哪些工件现在可以报工
+            notifiedIds.clear();
+
             closeSettingsModal();
-            alert('✅ 地址已保存，点击“报工”按钮将自动跳转');
+            renderRecords();
+            checkAndShowReadyPopup(false);
+            alert(`✅ 设置已保存\n报工窗口：工时前后各浮动 ${windowPercent}%`);
+        }
+
+        // ===== 快捷预设 =====
+        function setPercentPreset(pct) {
+            document.getElementById('windowPercentInput').value = pct;
+            syncPresetChips();
+        }
+
+        function syncPresetChips() {
+            const current = parseFloat(document.getElementById('windowPercentInput').value);
+            document.querySelectorAll('#percentPresets .chip').forEach(chip => {
+                const pct = parseFloat(chip.dataset.pct);
+                chip.classList.toggle('active', !isNaN(current) && pct === current);
+            });
         }
 
         // ================================================================
@@ -959,7 +1207,7 @@
             renderModelSelect();
         }
 
-        // ===== 修改：finishWork 增加自动跳转逻辑 =====
+        // ===== 报工：标记完成 + 自动跳转 =====
         function finishWork(id) {
             const record = records.find(r => r.id === id);
             if (!record || record.done) return;
@@ -969,10 +1217,13 @@
             record.finishTime = new Date().toISOString();
             saveRecords();
 
-            // 2. 刷新视图（可选，但跳转后页面会离开，可能看不到）
+            // 2. 从提醒列表移除
+            notifiedIds.delete(id);
+
+            // 3. 刷新视图
             renderRecords();
 
-            // 3. 自动跳转到配置的地址
+            // 4. 自动跳转到配置的地址
             if (jumpUrl) {
                 window.location.href = jumpUrl;
             } else {
@@ -985,6 +1236,7 @@
             if (!confirm('确定要移除该记录吗？')) return;
             records = records.filter(r => r.id !== id);
             delete expanded[id];
+            notifiedIds.delete(id);
             saveRecords();
             renderRecords();
         }
@@ -999,12 +1251,98 @@
             records = records.filter(r => r.done);
             saveRecords();
             expanded = {};
+            notifiedIds.clear();
             renderRecords();
         }
 
         function toggleDetails(id) {
             expanded[id] = !expanded[id];
             renderRecords();
+        }
+
+        // ================================================================
+        //  可报工自动提醒
+        // ================================================================
+
+        /**
+         * 获取当前所有状态为「可报工」或「已超时」的进行中工件
+         */
+        function getReadyRecords() {
+            const now = Date.now();
+            return records
+                .filter(r => {
+                    if (r.done) return false;
+                    const start = new Date(r.startTime).getTime();
+                    const { windowStart, windowEnd } = calcReportWindow(start, r.duration);
+                    const st = getStatus(now, windowStart, windowEnd);
+                    return st === 'ready' || st === 'overdue';
+                })
+                .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+        }
+
+        /**
+         * 检查并弹出提醒
+         * @param {boolean} force 为 true 时忽略去重标记（用于页面加载、设置变更）
+         */
+        function checkAndShowReadyPopup(force) {
+            const readyList = getReadyRecords();
+            if (readyList.length === 0) return;
+
+            // 自动检查时，若没有「新」的可报工工件，就不打扰
+            if (!force) {
+                const hasNew = readyList.some(r => !notifiedIds.has(r.id));
+                if (!hasNew) return;
+            }
+
+            // 标记为已提醒
+            readyList.forEach(r => notifiedIds.add(r.id));
+            showReadyPopup(readyList);
+        }
+
+        /**
+         * 渲染并显示提醒弹窗
+         */
+        function showReadyPopup(list) {
+            const container = document.getElementById('readyPopupList');
+            const now = Date.now();
+
+            container.innerHTML = list.map(r => {
+                const start = new Date(r.startTime).getTime();
+                const { windowStart, windowEnd } = calcReportWindow(start, r.duration);
+                const status = getStatus(now, windowStart, windowEnd);
+                const isOverdue = status === 'overdue';
+                const tagText = isOverdue ? '⚠️ 已超时' : '✅ 可报工';
+                const tagCls = isOverdue ? 'status-overdue' : 'status-ready';
+                const numberText = r.number && r.number.trim() ? escapeHtml(r.number.trim()) : '无编号';
+                const modelText = escapeHtml(r.modelName || '（已删除）');
+
+                return `
+                    <div class="ready-popup-item ${isOverdue ? 'overdue-item' : ''}">
+                        <div class="info">
+                            <span class="item-number"><span class="hash">#</span>${numberText}</span>
+                            <span class="item-model">
+                                ${modelText}
+                                <span class="mini-tag ${tagCls}">${tagText}</span>
+                            </span>
+                        </div>
+                        <button class="btn btn-success btn-sm" onclick="finishWorkFromPopup('${r.id}')">报工</button>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('readyPopup').classList.add('open');
+        }
+
+        function closeReadyPopup() {
+            document.getElementById('readyPopup').classList.remove('open');
+        }
+
+        /**
+         * 从提醒弹窗中直接报工
+         */
+        function finishWorkFromPopup(id) {
+            closeReadyPopup();
+            finishWork(id);
         }
 
         // ================================================================
@@ -1094,9 +1432,9 @@
 
             list.forEach(r => {
                 const start = new Date(r.startTime).getTime();
-                const durMs = r.duration * 60 * 1000;
-                const windowStart = start + durMs * 0.8;
-                const windowEnd = start + durMs * 1.2;
+
+                // ★ 使用可配置的浮动比例计算报工窗口
+                const { windowStart, windowEnd } = calcReportWindow(start, r.duration);
 
                 const modelDisplay = escapeHtml(r.modelName || '（已删除）');
                 const activeNumberDisplay = r.number ? '编号' + escapeHtml(r.number) : '（无编号）';
@@ -1170,6 +1508,10 @@
                                     <span class="value highlight">${formatTime(windowStart)} ~ ${formatTime(windowEnd)}</span>
                                 </div>
                                 <div class="row">
+                                    <span class="label">浮动比例</span>
+                                    <span class="value">±${formatPercent(windowPercent)}</span>
+                                </div>
+                                <div class="row">
                                     <span class="label">工时</span>
                                     <span class="value">${r.duration} 分钟</span>
                                 </div>
@@ -1215,6 +1557,21 @@
         //  工具函数
         // ================================================================
 
+        /**
+         * 根据开工时间、工时和全局浮动比例，计算报工窗口
+         * @param {number} startTs  开工时间戳（ms）
+         * @param {number} durationMin 工时（分钟）
+         * @returns {{windowStart:number, windowEnd:number}}
+         */
+        function calcReportWindow(startTs, durationMin) {
+            const durMs = durationMin * 60 * 1000;
+            const ratio = windowPercent / 100;
+            return {
+                windowStart: startTs + durMs * (1 - ratio),
+                windowEnd: startTs + durMs * (1 + ratio)
+            };
+        }
+
         function getStatus(now, windowStart, windowEnd) {
             if (now < windowStart) return 'waiting';
             if (now <= windowEnd) return 'ready';
@@ -1238,6 +1595,11 @@
             return `${s}s`;
         }
 
+        // 百分比格式化：整数不显示小数，小数最多保留 1 位
+        function formatPercent(p) {
+            return Number.isInteger(p) ? `${p}%` : `${p.toFixed(1)}%`;
+        }
+
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
@@ -1250,6 +1612,8 @@
 
         function openSettingsModal() {
             document.getElementById('jumpUrlInput').value = jumpUrl;
+            document.getElementById('windowPercentInput').value = windowPercent;
+            syncPresetChips();
             document.getElementById('settingsModal').classList.add('open');
         }
 
@@ -1257,6 +1621,7 @@
             document.getElementById('settingsModal').classList.remove('open');
         }
 
+        // 点击遮罩关闭所有弹窗（含设置弹窗、提醒弹窗）
         document.querySelectorAll('.modal-overlay').forEach(el => {
             el.addEventListener('click', (e) => {
                 if (e.target === el) {
@@ -1300,6 +1665,12 @@
                 if (panel.classList.contains('active')) {
                     renderRecords();
                 }
+
+                // 自动检查是否有「新」进入可报工状态的工件
+                const popup = document.getElementById('readyPopup');
+                if (popup && !popup.classList.contains('open')) {
+                    checkAndShowReadyPopup(false);
+                }
             }, 1000);
         }
 
@@ -1323,10 +1694,23 @@
             document.getElementById('workNumber').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') startWork();
             });
+
+            // 浮动比例输入框：实时高亮预设、回车保存
+            const pctInput = document.getElementById('windowPercentInput');
+            pctInput.addEventListener('input', syncPresetChips);
+            pctInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') saveSettings();
+            });
+            document.getElementById('jumpUrlInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') saveSettings();
+            });
+
+            // 页面加载后，检查是否有已到报工时间的工件并弹窗提醒
+            setTimeout(() => checkAndShowReadyPopup(true), 400);
         }
 
         init();
-        console.log('✅ 报工时间管家（报工自动跳转版）已启动');
+        console.log('✅ 报工助手（自定义浮动比例 + 可报工自动提醒）已启动');
     </script>
 
 </body>
