@@ -721,6 +721,21 @@
             border-radius: 10px;
         }
 
+        /* 一键全报按钮（高亮） */
+        .btn-batch-all {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            min-height: 52px;
+            box-shadow: 0 6px 16px rgba(22, 163, 74, 0.35);
+            letter-spacing: 0.3px;
+        }
+        .btn-batch-all:active {
+            background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+            transform: scale(0.97);
+        }
+
         /* ===== 设置项辅助样式 ===== */
         .setting-block {
             margin-bottom: 20px;
@@ -993,11 +1008,14 @@
     <!-- ===== 可报工自动提醒弹窗 ===== -->
     <div class="modal-overlay" id="readyPopup">
         <div class="modal">
-            <h3>⏰ 有工件可以报工啦</h3>
+            <h3 id="readyPopupTitle">⏰ 有工件可以报工啦</h3>
             <p>以下工件已进入报工时间窗口，请及时报工</p>
             <div id="readyPopupList" class="ready-popup-list"></div>
-            <div class="form-actions">
-                <button class="btn btn-outline" onclick="closeReadyPopup()">稍后再说</button>
+            <div class="form-actions" style="flex-direction:column;gap:10px;">
+                <button class="btn btn-success btn-block btn-batch-all" onclick="batchFinishAll()">
+                    ✅ 一键全报（全部标记为已报工并跳转）
+                </button>
+                <button class="btn btn-outline btn-block" onclick="closeReadyPopup()">稍后再说</button>
             </div>
         </div>
     </div>
@@ -1207,7 +1225,7 @@
             renderModelSelect();
         }
 
-        // ===== 报工：标记完成 + 自动跳转 =====
+        // ===== 单个报工：标记完成 + 自动跳转 =====
         function finishWork(id) {
             const record = records.find(r => r.id === id);
             if (!record || record.done) return;
@@ -1228,6 +1246,40 @@
                 window.location.href = jumpUrl;
             } else {
                 alert('⚠️ 请先在「设置」中配置跳转地址');
+                openSettingsModal();
+            }
+        }
+
+        // ===== ★ 一键全报：所有可报工工件一次性标记完成 + 跳转 =====
+        function batchFinishAll() {
+            const readyList = getReadyRecords();
+
+            if (readyList.length === 0) {
+                closeReadyPopup();
+                return;
+            }
+
+            const count = readyList.length;
+            const nowIso = new Date().toISOString();
+
+            // 批量标记为已报工
+            readyList.forEach(r => {
+                r.done = true;
+                r.finishTime = nowIso;
+                notifiedIds.delete(r.id);
+            });
+
+            saveRecords();
+            closeReadyPopup();
+            renderRecords();
+
+            // 跳转（延迟一点点让界面先更新）
+            if (jumpUrl) {
+                setTimeout(() => {
+                    window.location.href = jumpUrl;
+                }, 120);
+            } else {
+                alert(`✅ 已批量报工 ${count} 个工件\n⚠️ 但未配置跳转地址，请先在「设置」中配置`);
                 openSettingsModal();
             }
         }
@@ -1304,7 +1356,11 @@
          */
         function showReadyPopup(list) {
             const container = document.getElementById('readyPopupList');
+            const titleEl = document.getElementById('readyPopupTitle');
             const now = Date.now();
+
+            // 标题显示数量
+            titleEl.textContent = `⏰ 有 ${list.length} 个工件可以报工啦`;
 
             container.innerHTML = list.map(r => {
                 const start = new Date(r.startTime).getTime();
@@ -1338,7 +1394,7 @@
         }
 
         /**
-         * 从提醒弹窗中直接报工
+         * 从提醒弹窗中直接报工（单个）
          */
         function finishWorkFromPopup(id) {
             closeReadyPopup();
@@ -1710,7 +1766,7 @@
         }
 
         init();
-        console.log('✅ 报工助手（自定义浮动比例 + 可报工自动提醒）已启动');
+        console.log('✅ 报工助手（自定义浮动比例 + 可报工提醒 + 一键全报）已启动');
     </script>
 
 </body>
