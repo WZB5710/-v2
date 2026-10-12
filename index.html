@@ -173,6 +173,21 @@
             width: 100%;
         }
 
+        /* 教程按钮 */
+        .btn-tutorial {
+            background: #f3f0ff;
+            color: #6d28d9;
+            border: 1.5px solid #ddd6fe;
+            font-size: 14.5px !important;
+            min-height: 46px;
+            margin-top: 4px;
+        }
+        .btn-tutorial:active {
+            background: #ede9fe;
+            border-color: #c4b5fd;
+            color: #5b21b6;
+        }
+
         /* ===== Tab 导航 ===== */
         .tabs {
             display: flex;
@@ -526,37 +541,150 @@
             color: #2a6df4;
         }
 
-        .record-card.done-card {
-            padding: 16px;
+        /* ============================================================ */
+        /* ===== 今日已报工（新） ===== */
+        /* ============================================================ */
+
+        /* 统计卡片 */
+        .done-stats {
+            background: linear-gradient(135deg, #2a6df4 0%, #1a5ad9 100%);
+            border-radius: 18px;
+            padding: 20px 22px;
+            color: #fff;
+            margin-bottom: 18px;
+            box-shadow: 0 8px 22px rgba(42, 109, 244, 0.28);
+            position: relative;
+            overflow: hidden;
         }
 
-        .record-card.done-card .record-header {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            margin-bottom: 10px;
+        .done-stats::after {
+            content: "";
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            width: 110px;
+            height: 110px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
-        .record-card.done-card .record-body {
+        .done-stats-label {
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0.92;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 6px;
-            font-size: 15px;
         }
 
-        .record-card.done-card .record-body .row {
+        .done-stats-value {
+            font-size: 46px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -1.5px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .done-stats-unit {
+            font-size: 18px;
+            font-weight: 600;
+            opacity: 0.9;
+            letter-spacing: 0;
+        }
+
+        .done-stats-meta {
+            font-size: 13px;
+            opacity: 0.88;
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .done-stats-meta .sep {
+            opacity: 0.5;
+        }
+
+        /* 型号分组 */
+        .done-groups {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .done-group {
+            background: #ffffff;
+            border: 1.5px solid #e6edf6;
+            border-radius: 16px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .done-group-head {
             display: flex;
             justify-content: space-between;
-            padding: 2px 0;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
         }
 
-        .record-card.done-card .record-footer {
+        .done-group-model {
+            font-size: 16.5px;
+            font-weight: 700;
+            color: #0b1a33;
+            letter-spacing: -0.2px;
+            min-width: 0;
+            word-break: break-all;
+        }
+
+        .done-group-meta {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #5b6e8a;
+            background: #eef2f7;
+            padding: 3px 11px;
+            border-radius: 11px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .done-group-numbers {
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #eef2f7;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .num-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 12px;
+            background: #eef4ff;
+            color: #2a6df4;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .num-chip .hash {
+            opacity: 0.5;
+            margin-right: 2px;
+            font-weight: 600;
+        }
+
+        .num-chip.no-num {
+            background: #f0f2f6;
+            color: #8995a8;
+            font-style: italic;
+            font-weight: 600;
         }
 
         /* ===== 空状态 ===== */
@@ -626,6 +754,154 @@
         .modal .form-actions .btn {
             flex: 1;
             min-height: 48px;
+        }
+
+        /* ===== 教程弹窗 ===== */
+        #tutorialModal {
+            z-index: 1000;
+        }
+
+        #tutorialModal .modal {
+            padding: 24px 20px;
+            max-width: 440px;
+        }
+
+        .tut-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .tut-header .tut-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 6px 14px rgba(139, 92, 246, 0.3);
+            flex-shrink: 0;
+        }
+
+        .tut-header h3 {
+            margin: 0;
+            font-size: 19px;
+            line-height: 1.25;
+        }
+
+        .tut-sub {
+            color: #7f94b0;
+            font-size: 13px;
+            margin-bottom: 18px;
+            padding-left: 56px;
+        }
+
+        .tut-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 50vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 2px;
+            margin: 0 -2px;
+        }
+
+        .tut-step {
+            display: flex;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #f8faff;
+            border: 1px solid #e6edf6;
+            border-radius: 14px;
+            transition: all 0.18s;
+        }
+
+        .tut-step:active {
+            background: #f0f5ff;
+        }
+
+        .tut-step .step-num {
+            flex-shrink: 0;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2a6df4 0%, #1a5ad9 100%);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 8px rgba(42, 109, 244, 0.25);
+            margin-top: 1px;
+        }
+
+        .tut-step .step-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tut-step .step-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #0b1a33;
+            margin-bottom: 3px;
+            line-height: 1.4;
+        }
+
+        .tut-step .step-desc {
+            font-size: 13.5px;
+            color: #5b6e8a;
+            line-height: 1.65;
+            word-break: break-word;
+        }
+
+        .kbd {
+            display: inline-block;
+            padding: 0 7px;
+            margin: 0 2px;
+            background: #eef4ff;
+            border: 1px solid #d3e0f7;
+            border-radius: 6px;
+            color: #2a6df4;
+            font-weight: 600;
+            font-size: 12.5px;
+            line-height: 20px;
+            white-space: nowrap;
+        }
+
+        .em-danger {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .em-primary {
+            color: #2a6df4;
+            font-weight: 700;
+        }
+
+        .tut-tip {
+            margin-top: 14px;
+            padding: 11px 14px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #92400e;
+            line-height: 1.6;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .tut-tip .tip-icon {
+            flex-shrink: 0;
+            font-size: 15px;
+            line-height: 1.4;
         }
 
         /* ===== 可报工提醒弹窗 ===== */
@@ -837,6 +1113,11 @@
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
                 gap: 12px;
             }
+            .done-groups {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 12px;
+            }
         }
 
         @media (min-width: 1024px) {
@@ -947,8 +1228,8 @@
                     <input type="text" id="modelNameInput" placeholder="例如: 型号A" />
                 </div>
                 <div class="form-group">
-                    <label for="modelDurationInput">工时（分钟）</label>
-                    <input type="number" id="modelDurationInput" placeholder="120" min="1" />
+                    <label for="modelDurationInput">工时定额</label>
+                    <input type="number" id="modelDurationInput" placeholder="1" min="1" />
                 </div>
                 <div class="form-actions">
                     <button class="btn btn-success" onclick="addModel()">➕ 添加</button>
@@ -998,9 +1279,102 @@
                 <span class="field-hint">报工成功后自动跳转的地址（URL Scheme 或 网页链接）</span>
             </div>
 
+            <!-- 报工链接获取方式 -->
+            <button type="button" class="btn btn-tutorial btn-block" onclick="openTutorialModal()">
+                📖 报工链接获取方式
+            </button>
+
             <div class="form-actions">
                 <button class="btn btn-outline" onclick="closeSettingsModal()">取消</button>
                 <button class="btn btn-primary" onclick="saveSettings()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 教程弹窗 ===== -->
+    <div class="modal-overlay" id="tutorialModal">
+        <div class="modal">
+            <div class="tut-header">
+                <div class="tut-icon">📖</div>
+                <h3>报工链接获取方式</h3>
+            </div>
+            <div class="tut-sub">跟着做，6 步拿到专属跳转链接</div>
+
+            <div class="tut-steps">
+                <div class="tut-step">
+                    <div class="step-num">1</div>
+                    <div class="step-body">
+                        <div class="step-title">打开 Welink 报工平台</div>
+                        <div class="step-desc">在 Welink 中找到并进入报工平台首页。</div>
+                    </div>
+                </div>
+
+                <div class="tut-step">
+                    <div class="step-num">2</div>
+                    <div class="step-body">
+                        <div class="step-title">分享报工平台</div>
+                        <div class="step-desc">
+                            点击右上角 <span class="kbd">⋯</span> → 点<span class="em-primary">分享</span>，
+                            分享给自己的 Welink 账号。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tut-step">
+                    <div class="step-num">3</div>
+                    <div class="step-body">
+                        <div class="step-title">进入扫码报工界面并再次分享</div>
+                        <div class="step-desc">
+                            打开自己账号里分享的链接，选择好自己对应工序的报工选项，
+                            到<span class="em-primary">扫码报工</span>的界面，点击右上角
+                            <span class="kbd">⋯</span> 分享给自己的 Welink 账号。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tut-step">
+                    <div class="step-num">4</div>
+                    <div class="step-body">
+                        <div class="step-title">断网后复制真实链接</div>
+                        <div class="step-desc">
+                            点击打开刚才分享的报工界面链接后，先
+                            <span class="em-danger">关闭手机的网络</span>，再点击右上角
+                            <span class="kbd">⋯</span> → <span class="em-primary">系统浏览器</span>。
+                            此时跳转到浏览器会显示网络异常，复制此时的链接，这个就是跳转的链接。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tut-step">
+                    <div class="step-num">5</div>
+                    <div class="step-body">
+                        <div class="step-title">粘贴链接到报工助手</div>
+                        <div class="step-desc">
+                            粘贴刚复制的链接到报工助手的设置里，
+                            填入「<span class="em-primary">跳转地址</span>」后保存。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tut-step">
+                    <div class="step-num">6</div>
+                    <div class="step-body">
+                        <div class="step-title">验证跳转</div>
+                        <div class="step-desc">
+                            点击顶部的「<span class="em-primary">🚀 一键跳转</span>」，
+                            验证一下是否可以正常跳转。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tut-tip">
+                <span class="tip-icon">💡</span>
+                <span>第 4 步是关键：必须先断网，再通过「系统浏览器」打开，才能拿到真正的跳转链接。</span>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" onclick="closeTutorialModal()">我知道了</button>
             </div>
         </div>
     </div>
@@ -1030,16 +1404,15 @@
         const STORAGE_KEY_JUMP_URL = 'worktime_jump_url';
         const STORAGE_KEY_WINDOW_PERCENT = 'worktime_window_percent';
 
-        const DEFAULT_WINDOW_PERCENT = 20;   // 默认上下浮动 20%
+        const DEFAULT_WINDOW_PERCENT = 20;
 
         let models = [];
         let records = [];
         let jumpUrl = '';
-        let windowPercent = DEFAULT_WINDOW_PERCENT;   // 报工窗口浮动比例（%）
+        let windowPercent = DEFAULT_WINDOW_PERCENT;
         let currentView = 'active';
         let expanded = {};
 
-        // 已弹窗提醒过的记录 ID（内存级去重，避免同一秒内反复弹窗）
         let notifiedIds = new Set();
 
         function loadData() {
@@ -1055,14 +1428,12 @@
 
             jumpUrl = localStorage.getItem(STORAGE_KEY_JUMP_URL) || '';
 
-            // 读取浮动比例并做合法性校验
             const pctRaw = localStorage.getItem(STORAGE_KEY_WINDOW_PERCENT);
             const pct = parseFloat(pctRaw);
             windowPercent = (pctRaw !== null && !isNaN(pct) && pct >= 0 && pct <= 100)
                 ? pct
                 : DEFAULT_WINDOW_PERCENT;
 
-            // 回填到设置面板
             document.getElementById('jumpUrlInput').value = jumpUrl;
             document.getElementById('windowPercentInput').value = windowPercent;
             syncPresetChips();
@@ -1076,7 +1447,6 @@
             localStorage.setItem(STORAGE_KEY_RECORDS, JSON.stringify(records));
         }
 
-        // ===== 统一保存设置（跳转地址 + 浮动比例） =====
         function saveSettings() {
             const urlVal = document.getElementById('jumpUrlInput').value.trim();
             const pctRaw = document.getElementById('windowPercentInput').value.trim();
@@ -1097,7 +1467,6 @@
             localStorage.setItem(STORAGE_KEY_JUMP_URL, jumpUrl);
             localStorage.setItem(STORAGE_KEY_WINDOW_PERCENT, String(windowPercent));
 
-            // 比例变化后，重新评估哪些工件现在可以报工
             notifiedIds.clear();
 
             closeSettingsModal();
@@ -1106,7 +1475,6 @@
             alert(`✅ 设置已保存\n报工窗口：工时前后各浮动 ${windowPercent}%`);
         }
 
-        // ===== 快捷预设 =====
         function setPercentPreset(pct) {
             document.getElementById('windowPercentInput').value = pct;
             syncPresetChips();
@@ -1121,7 +1489,7 @@
         }
 
         // ================================================================
-        //  核心：一键跳转（顶部按钮）
+        //  一键跳转
         // ================================================================
 
         function quickJump() {
@@ -1156,7 +1524,7 @@
             const dur = parseInt(durInput.value);
 
             if (!name) { alert('请输入型号名称'); return; }
-            if (!dur || dur < 1) { alert('请输入有效的工时（分钟）'); return; }
+            if (!dur || dur < 1) { alert('请输入有效的工时定额'); return; }
 
             if (models.some(m => m.name === name)) {
                 alert('该型号已存在，请勿重复添加');
@@ -1186,7 +1554,7 @@
         }
 
         // ================================================================
-        //  主界面 - 开工 & 记录管理
+        //  开工 & 记录管理
         // ================================================================
 
         function startWork() {
@@ -1225,23 +1593,16 @@
             renderModelSelect();
         }
 
-        // ===== 单个报工：标记完成 + 自动跳转 =====
         function finishWork(id) {
             const record = records.find(r => r.id === id);
             if (!record || record.done) return;
 
-            // 1. 标记为已报工
             record.done = true;
             record.finishTime = new Date().toISOString();
             saveRecords();
-
-            // 2. 从提醒列表移除
             notifiedIds.delete(id);
-
-            // 3. 刷新视图
             renderRecords();
 
-            // 4. 自动跳转到配置的地址
             if (jumpUrl) {
                 window.location.href = jumpUrl;
             } else {
@@ -1250,7 +1611,6 @@
             }
         }
 
-        // ===== ★ 一键全报：所有可报工工件一次性标记完成 + 跳转 =====
         function batchFinishAll() {
             const readyList = getReadyRecords();
 
@@ -1262,7 +1622,6 @@
             const count = readyList.length;
             const nowIso = new Date().toISOString();
 
-            // 批量标记为已报工
             readyList.forEach(r => {
                 r.done = true;
                 r.finishTime = nowIso;
@@ -1273,7 +1632,6 @@
             closeReadyPopup();
             renderRecords();
 
-            // 跳转（延迟一点点让界面先更新）
             if (jumpUrl) {
                 setTimeout(() => {
                     window.location.href = jumpUrl;
@@ -1316,9 +1674,6 @@
         //  可报工自动提醒
         // ================================================================
 
-        /**
-         * 获取当前所有状态为「可报工」或「已超时」的进行中工件
-         */
         function getReadyRecords() {
             const now = Date.now();
             return records
@@ -1332,34 +1687,24 @@
                 .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
         }
 
-        /**
-         * 检查并弹出提醒
-         * @param {boolean} force 为 true 时忽略去重标记（用于页面加载、设置变更）
-         */
         function checkAndShowReadyPopup(force) {
             const readyList = getReadyRecords();
             if (readyList.length === 0) return;
 
-            // 自动检查时，若没有「新」的可报工工件，就不打扰
             if (!force) {
                 const hasNew = readyList.some(r => !notifiedIds.has(r.id));
                 if (!hasNew) return;
             }
 
-            // 标记为已提醒
             readyList.forEach(r => notifiedIds.add(r.id));
             showReadyPopup(readyList);
         }
 
-        /**
-         * 渲染并显示提醒弹窗
-         */
         function showReadyPopup(list) {
             const container = document.getElementById('readyPopupList');
             const titleEl = document.getElementById('readyPopupTitle');
             const now = Date.now();
 
-            // 标题显示数量
             titleEl.textContent = `⏰ 有 ${list.length} 个工件可以报工啦`;
 
             container.innerHTML = list.map(r => {
@@ -1393,9 +1738,6 @@
             document.getElementById('readyPopup').classList.remove('open');
         }
 
-        /**
-         * 从提醒弹窗中直接报工（单个）
-         */
         function finishWorkFromPopup(id) {
             closeReadyPopup();
             finishWork(id);
@@ -1412,7 +1754,7 @@
             models.forEach(m => {
                 const opt = document.createElement('option');
                 opt.value = m.id;
-                opt.textContent = `${m.name}（${m.duration}分钟）`;
+                opt.textContent = `${m.name}（定额 ${m.duration}）`;
                 select.appendChild(opt);
             });
             if (currentVal && models.some(m => m.id === currentVal)) {
@@ -1438,7 +1780,7 @@
                     <div class="model-card">
                         <div class="model-info">
                             <span class="model-name">${escapeHtml(m.name)}</span>
-                            <span class="model-duration">⏱ <strong>${m.duration}</strong> 分钟</span>
+                            <span class="model-duration">⏱ 定额 <strong>${m.duration}</strong></span>
                         </div>
                         <div class="model-actions">
                             <button class="btn btn-danger btn-sm" onclick="deleteModel('${m.id}')">删除</button>
@@ -1454,30 +1796,28 @@
             const container = document.getElementById('recordsContainer');
             const countEl = document.getElementById('recordCount');
             const titleEl = document.getElementById('listTitle');
-            const emptyTextEl = document.getElementById('emptyText');
-
-            let list = [];
-            let title = '';
-            let emptyMsg = '';
 
             if (currentView === 'active') {
-                list = records.filter(r => !r.done).sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-                title = '⏳ 进行中的工件';
-                emptyMsg = '暂无进行中的工件，选择型号后点击「开工」开始计时';
+                renderActiveView(container, countEl, titleEl);
             } else {
-                list = records.filter(r => r.done).sort((a, b) => new Date(b.finishTime) - new Date(a.finishTime));
-                title = '✅ 已报工的工件';
-                emptyMsg = '暂无已报工记录';
+                renderDoneView(container, countEl, titleEl);
             }
+        }
 
-            titleEl.textContent = title;
+        // ---- 进行中视图（原样保留） ----
+        function renderActiveView(container, countEl, titleEl) {
+            const list = records
+                .filter(r => !r.done)
+                .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+
+            titleEl.textContent = '⏳ 进行中的工件';
             countEl.textContent = `共 ${list.length} 个`;
 
             if (list.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">📭</div>
-                        <p>${emptyMsg}</p>
+                        <p>暂无进行中的工件，选择型号后点击「开工」开始计时</p>
                     </div>
                 `;
                 return;
@@ -1488,121 +1828,186 @@
 
             list.forEach(r => {
                 const start = new Date(r.startTime).getTime();
-
-                // ★ 使用可配置的浮动比例计算报工窗口
                 const { windowStart, windowEnd } = calcReportWindow(start, r.duration);
-
                 const modelDisplay = escapeHtml(r.modelName || '（已删除）');
                 const activeNumberDisplay = r.number ? '编号' + escapeHtml(r.number) : '（无编号）';
-                const doneNumberDisplay = r.number ? '#' + escapeHtml(r.number) : '（无编号）';
 
-                if (!r.done) {
-                    const status = getStatus(now, windowStart, windowEnd);
-                    const statusMap = {
-                        waiting: { label: '⏳ 等待报工', cls: 'status-waiting' },
-                        ready: { label: '✅ 可报工', cls: 'status-ready' },
-                        overdue: { label: '⚠️ 已超时', cls: 'status-overdue' }
-                    };
-                    const statusLabel = statusMap[status].label;
-                    const statusClass = statusMap[status].cls;
+                const status = getStatus(now, windowStart, windowEnd);
+                const statusMap = {
+                    waiting: { label: '⏳ 等待报工', cls: 'status-waiting' },
+                    ready: { label: '✅ 可报工', cls: 'status-ready' },
+                    overdue: { label: '⚠️ 已超时', cls: 'status-overdue' }
+                };
+                const statusLabel = statusMap[status].label;
+                const statusClass = statusMap[status].cls;
 
-                    let countdownText = '';
-                    let countdownClass = '';
-                    if (status === 'waiting') {
-                        const remain = windowStart - now;
-                        if (remain > 0) {
-                            countdownText = `⏳ ${formatDuration(remain)} 后可报`;
-                        } else {
-                            countdownText = '即将可报工';
-                            countdownClass = 'ready';
-                        }
-                    } else if (status === 'ready') {
-                        const remain = windowEnd - now;
-                        countdownText = `✅ 可报（剩 ${formatDuration(remain)}）`;
-                        countdownClass = 'ready';
+                let countdownText = '';
+                let countdownClass = '';
+                if (status === 'waiting') {
+                    const remain = windowStart - now;
+                    if (remain > 0) {
+                        countdownText = `⏳ ${formatDuration(remain)} 后可报`;
                     } else {
-                        const over = now - windowEnd;
-                        countdownText = `⏰ 超时 ${formatDuration(over)}`;
-                        countdownClass = 'overdue';
+                        countdownText = '即将可报工';
+                        countdownClass = 'ready';
                     }
-
-                    const isExpanded = expanded[r.id] || false;
-                    const detailsDisplay = isExpanded ? 'open' : '';
-                    const deadlineStr = formatTime(windowEnd);
-
-                    html += `
-                        <div class="record-card compact" data-id="${r.id}">
-                            <div class="record-header-compact">
-                                <span class="record-model">${modelDisplay}</span>
-                                <span class="status-badge ${statusClass}">${statusLabel}</span>
-                            </div>
-                            <div class="record-sub">
-                                <span class="record-number">${activeNumberDisplay}</span>
-                                <span class="record-deadline">⏰ 最晚 ${deadlineStr}</span>
-                            </div>
-                            <div class="record-countdown">
-                                <span class="countdown-large ${countdownClass}">${countdownText}</span>
-                            </div>
-                            <div class="record-actions">
-                                <button class="btn btn-outline btn-sm btn-toggle" onclick="toggleDetails('${r.id}')">
-                                    <span class="arrow ${isExpanded ? 'open' : ''}">▼</span> 详情
-                                </button>
-                                ${(status === 'ready' || status === 'overdue') ? `
-                                    <button class="btn btn-success btn-sm" onclick="finishWork('${r.id}')">✅ 报工</button>
-                                ` : `
-                                    <button class="btn btn-outline btn-sm" disabled style="opacity:0.5;">⏳ 等待</button>
-                                `}
-                                <button class="btn btn-danger btn-sm" onclick="deleteRecord('${r.id}')">🗑</button>
-                            </div>
-                            <div class="record-details ${detailsDisplay}">
-                                <div class="row">
-                                    <span class="label">开工时间</span>
-                                    <span class="value">${formatTime(start)}</span>
-                                </div>
-                                <div class="row">
-                                    <span class="label">报工窗口</span>
-                                    <span class="value highlight">${formatTime(windowStart)} ~ ${formatTime(windowEnd)}</span>
-                                </div>
-                                <div class="row">
-                                    <span class="label">浮动比例</span>
-                                    <span class="value">±${formatPercent(windowPercent)}</span>
-                                </div>
-                                <div class="row">
-                                    <span class="label">工时</span>
-                                    <span class="value">${r.duration} 分钟</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                } else if (status === 'ready') {
+                    const remain = windowEnd - now;
+                    countdownText = `✅ 可报（剩 ${formatDuration(remain)}）`;
+                    countdownClass = 'ready';
                 } else {
-                    const finish = new Date(r.finishTime).getTime();
-                    html += `
-                        <div class="record-card done-card">
-                            <div class="record-header">
-                                <div class="record-model">${modelDisplay}</div>
-                                <span class="status-badge status-done">✅ 已报工</span>
+                    const over = now - windowEnd;
+                    countdownText = `⏰ 超时 ${formatDuration(over)}`;
+                    countdownClass = 'overdue';
+                }
+
+                const isExpanded = expanded[r.id] || false;
+                const detailsDisplay = isExpanded ? 'open' : '';
+                const deadlineStr = formatTime(windowEnd);
+
+                html += `
+                    <div class="record-card compact" data-id="${r.id}">
+                        <div class="record-header-compact">
+                            <span class="record-model">${modelDisplay}</span>
+                            <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        </div>
+                        <div class="record-sub">
+                            <span class="record-number">${activeNumberDisplay}</span>
+                            <span class="record-deadline">⏰ 最晚 ${deadlineStr}</span>
+                        </div>
+                        <div class="record-countdown">
+                            <span class="countdown-large ${countdownClass}">${countdownText}</span>
+                        </div>
+                        <div class="record-actions">
+                            <button class="btn btn-outline btn-sm btn-toggle" onclick="toggleDetails('${r.id}')">
+                                <span class="arrow ${isExpanded ? 'open' : ''}">▼</span> 详情
+                            </button>
+                            ${(status === 'ready' || status === 'overdue') ? `
+                                <button class="btn btn-success btn-sm" onclick="finishWork('${r.id}')">✅ 报工</button>
+                            ` : `
+                                <button class="btn btn-outline btn-sm" disabled style="opacity:0.5;">⏳ 等待</button>
+                            `}
+                            <button class="btn btn-danger btn-sm" onclick="deleteRecord('${r.id}')">🗑</button>
+                        </div>
+                        <div class="record-details ${detailsDisplay}">
+                            <div class="row">
+                                <span class="label">开工时间</span>
+                                <span class="value">${formatTime(start)}</span>
                             </div>
-                            <div class="record-number" style="margin-bottom:6px;">${doneNumberDisplay}</div>
-                            <div class="record-body">
-                                <div class="row">
-                                    <span class="label">开工时间</span>
-                                    <span class="value">${formatTime(start)}</span>
-                                </div>
-                                <div class="row">
-                                    <span class="label">报工完成</span>
-                                    <span class="value">${formatTime(finish)}</span>
-                                </div>
-                                <div class="row">
-                                    <span class="label">工时</span>
-                                    <span class="value">${r.duration} 分钟</span>
-                                </div>
+                            <div class="row">
+                                <span class="label">报工窗口</span>
+                                <span class="value highlight">${formatTime(windowStart)} ~ ${formatTime(windowEnd)}</span>
                             </div>
-                            <div class="record-footer">
-                                <button class="btn btn-outline btn-sm" onclick="deleteRecord('${r.id}')">🗑 删除记录</button>
+                            <div class="row">
+                                <span class="label">浮动比例</span>
+                                <span class="value">±${formatPercent(windowPercent)}</span>
+                            </div>
+                            <div class="row">
+                                <span class="label">工时定额</span>
+                                <span class="value">${r.duration}</span>
                             </div>
                         </div>
-                    `;
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // ---- 已报工视图（新：按型号汇总 + 今日工时统计） ----
+        function renderDoneView(container, countEl, titleEl) {
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            const todayEnd = todayStart + 86400000;
+
+            // 今日已报工记录
+            const todayDone = records.filter(r => {
+                if (!r.done || !r.finishTime) return false;
+                const t = new Date(r.finishTime).getTime();
+                return t >= todayStart && t < todayEnd;
+            });
+
+            titleEl.textContent = '✅ 今日已报工';
+            countEl.textContent = `共 ${todayDone.length} 个`;
+
+            if (todayDone.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <p>今天还没有报工记录</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 按型号分组
+            const groups = new Map();
+            let totalHours = 0;
+
+            todayDone.forEach(r => {
+                const key = r.modelId || r.modelName || '_unknown';
+                if (!groups.has(key)) {
+                    groups.set(key, {
+                        modelName: r.modelName || '（已删除）',
+                        items: []
+                    });
                 }
+                groups.get(key).items.push(r);
+                totalHours += (r.duration || 0);
+            });
+
+            // 组内按编号排序
+            groups.forEach(g => {
+                g.items.sort((a, b) => {
+                    const an = (a.number || '').trim();
+                    const bn = (b.number || '').trim();
+                    if (an && bn) return an.localeCompare(bn, undefined, { numeric: true });
+                    if (an) return -1;
+                    if (bn) return 1;
+                    return new Date(a.finishTime) - new Date(b.finishTime);
+                });
+            });
+
+            const groupArr = Array.from(groups.values());
+            const totalHoursText = Number.isInteger(totalHours) ? totalHours : totalHours.toFixed(1);
+
+            let html = `
+                <div class="done-stats">
+                    <div class="done-stats-label">📊 今日累计工时</div>
+                    <div class="done-stats-value">
+                        ${totalHoursText}<span class="done-stats-unit">工时</span>
+                    </div>
+                    <div class="done-stats-meta">
+                        <span>共 ${todayDone.length} 个工件</span>
+                        <span class="sep">·</span>
+                        <span>${groupArr.length} 种型号</span>
+                    </div>
+                </div>
+                <div class="done-groups">
+            `;
+
+            groupArr.forEach(g => {
+                const groupHours = g.items.reduce((s, r) => s + (r.duration || 0), 0);
+                const groupHoursText = Number.isInteger(groupHours) ? groupHours : groupHours.toFixed(1);
+
+                html += `
+                    <div class="done-group">
+                        <div class="done-group-head">
+                            <span class="done-group-model">${escapeHtml(g.modelName)}</span>
+                            <span class="done-group-meta">${g.items.length} 个 · ${groupHoursText} 工时</span>
+                        </div>
+                        <div class="done-group-numbers">
+                            ${g.items.map(r => {
+                                const numText = (r.number || '').trim();
+                                if (numText) {
+                                    return `<span class="num-chip"><span class="hash">#</span>${escapeHtml(numText)}</span>`;
+                                }
+                                return `<span class="num-chip no-num">无编号</span>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
             });
 
             html += '</div>';
@@ -1613,12 +2018,6 @@
         //  工具函数
         // ================================================================
 
-        /**
-         * 根据开工时间、工时和全局浮动比例，计算报工窗口
-         * @param {number} startTs  开工时间戳（ms）
-         * @param {number} durationMin 工时（分钟）
-         * @returns {{windowStart:number, windowEnd:number}}
-         */
         function calcReportWindow(startTs, durationMin) {
             const durMs = durationMin * 60 * 1000;
             const ratio = windowPercent / 100;
@@ -1651,7 +2050,6 @@
             return `${s}s`;
         }
 
-        // 百分比格式化：整数不显示小数，小数最多保留 1 位
         function formatPercent(p) {
             return Number.isInteger(p) ? `${p}%` : `${p.toFixed(1)}%`;
         }
@@ -1677,7 +2075,14 @@
             document.getElementById('settingsModal').classList.remove('open');
         }
 
-        // 点击遮罩关闭所有弹窗（含设置弹窗、提醒弹窗）
+        function openTutorialModal() {
+            document.getElementById('tutorialModal').classList.add('open');
+        }
+
+        function closeTutorialModal() {
+            document.getElementById('tutorialModal').classList.remove('open');
+        }
+
         document.querySelectorAll('.modal-overlay').forEach(el => {
             el.addEventListener('click', (e) => {
                 if (e.target === el) {
@@ -1722,7 +2127,6 @@
                     renderRecords();
                 }
 
-                // 自动检查是否有「新」进入可报工状态的工件
                 const popup = document.getElementById('readyPopup');
                 if (popup && !popup.classList.contains('open')) {
                     checkAndShowReadyPopup(false);
@@ -1751,7 +2155,6 @@
                 if (e.key === 'Enter') startWork();
             });
 
-            // 浮动比例输入框：实时高亮预设、回车保存
             const pctInput = document.getElementById('windowPercentInput');
             pctInput.addEventListener('input', syncPresetChips);
             pctInput.addEventListener('keydown', (e) => {
@@ -1761,12 +2164,11 @@
                 if (e.key === 'Enter') saveSettings();
             });
 
-            // 页面加载后，检查是否有已到报工时间的工件并弹窗提醒
             setTimeout(() => checkAndShowReadyPopup(true), 400);
         }
 
         init();
-        console.log('✅ 报工助手（自定义浮动比例 + 可报工提醒 + 一键全报）已启动');
+        console.log('✅ 报工助手（今日工时统计 + 型号汇总）已启动');
     </script>
 
 </body>
